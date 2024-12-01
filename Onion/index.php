@@ -6,6 +6,7 @@ switch ($request_uri) {
     case '/ ':
     case '/Views':
     case '/Views/':
+    case 'Views/':
         header('Location: Views/login.php');
         exit();
 
