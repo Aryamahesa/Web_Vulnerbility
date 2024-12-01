@@ -12,7 +12,7 @@ Persyaratan
 - MySQL
 - Git
 
-## Installation Steps
+## Linux Installation Steps
 
 ### 1. Clone the Repository
 ```bash
