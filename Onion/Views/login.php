@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit;
     } else {
-       $error = "username dan password salah";
+       $error = "username atau password salah";
     }
 }
 ?>
