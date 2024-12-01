@@ -1,11 +1,7 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 session_start();
 require '../connect.php';
 
-$error = ""; 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $username = $_POST['username'];
@@ -30,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit;
     } else {
-       
+       $error = "username dan password salah";
     }
 }
 ?>
@@ -56,6 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" required>
             </div>
+            <?php if ($error): ?>
+                <div class="error"><?php echo $error; ?></div>
+            <?php endif; ?>
             <button type="submit">Login</button>
         </form>
     </div>
