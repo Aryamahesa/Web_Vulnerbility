@@ -80,7 +80,7 @@ CREATE TABLE users (
     - Dashboard Admin: `/dashboard/admin.php`
     - Profil Pengguna: `/users/profile.php`
 
-## Note
+# Note
 Aplikasi ini sengaja rentan terhadap SQL Injection untuk tujuan pendidikan. Jangan gunakan ini di lingkungan produksi.
 Ubah connect.php atau pengaturan basis data sesuai kebutuhan untuk lingkungan Anda.
 
