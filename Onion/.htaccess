@@ -1,0 +1,15 @@
+RewriteEngine On
+
+# Mengarahkan semua permintaan ke index.php, kecuali file atau folder yang sudah ada
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php [QSA,L]
+
+# Mengarahkan error 404 ke Views/x404.php
+ErrorDocument 404 /Views/404.php
+
+# Redirect folder access ke login.php (buat akses langsung ke Views/login.php jika folder Views diakses)
+DirectoryIndex /Views/login.php
+
+# Nonaktifkan directory listing
+Options -Indexes
