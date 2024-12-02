@@ -49,7 +49,7 @@ sudo systemctl restart apache2
 mysql -u root -p
 ```
 ```sql
-CREATE DATABASE socDB;
+CREATE DATABASE yourDB;
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'user';
 GRANT ALL PRIVILEGES ON userDB.* TO 'user'@'localhost';
 FLUSH PRIVILEGES;
