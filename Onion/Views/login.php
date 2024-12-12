@@ -1,6 +1,10 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);   
 session_start();
-require '../connect.php';
+include __DIR__ . '/../config/connect.php';
+
+$error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -20,13 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['role'] = $user['role'];
 
         if ($user['role'] === 'admin') {
-            header("Location: /dashboard/admin.php");
+            header("Location: /Views/dashboard/admin.php");
         } else if ($user['role'] === 'user') {
-            header("Location: /users/profile.php");
+            header("Location: /Views/users/profile.php");
         }
         exit;
     } else {
-       $error = "username atau password salah";
+       $error = "username dan password salah";
     }
 }
 ?>
@@ -37,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="../public/css/login.css">
 </head>
 <body>
     <div class="login">
@@ -46,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" id="username" required>
+                <input type="text" name="username" id="username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" required>
+                <input type="password" name="password" id="password">
             </div>
             <?php if ($error): ?>
                 <div class="error"><?php echo $error; ?></div>
