@@ -3,13 +3,21 @@ RewriteEngine On
 # Mengarahkan semua permintaan ke index.php, kecuali file atau folder yang sudah ada
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ /index.php [QSA,L]
+RewriteRule ^(.*)$ index.php [QSA,L]
 
-# Mengarahkan error 404 ke Views/x404.php
-ErrorDocument 404 /Views/404.php
+# Pastikan file di folder public tetap dapat diakses
+RewriteCond %{REQUEST_URI} ^/public/(.*)$
+RewriteRule ^(.*)$ - [L]
+
+# Mengarahkan error 404 ke Views/404.php
+ErrorDocument 404 http://localhost:1415/404.php
+
+# Mengarahkan error 404 ke Views/403.php
+ErrorDocument 403 http://localhost:1415/403.php
 
 # Redirect folder access ke login.php (buat akses langsung ke Views/login.php jika folder Views diakses)
 DirectoryIndex /Views/login.php
 
 # Nonaktifkan directory listing
 Options -Indexes
+
