@@ -7,16 +7,24 @@ switch ($request_uri) {
     case '/Views':
     case '/Views/':
     case 'Views/':
-        header('Location: Views/login.php');
+
+        header('Location: /Views/login.php');
         exit();
 
     case '/login.php':
+
         require __DIR__ . '/Views/login.php';
         exit();
-
+    
     default:
-        http_response_code(404);  
-        require __DIR__ . '/Views/404.php';
-        exit();
+
+        if (http_response_code(404)){
+            require __DIR__ . '/404.php';
+            exit();
+        }
+        if (http_response_code(403)){
+            require __DIR__ . '/403.php';
+            exit();
+        } 
 }
 ?>
