@@ -6,34 +6,38 @@ include __DIR__ . '/../config/connect.php';
 
 $error = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Cek jika parameter username dan password tersedia
+    $username = isset($_GET['username']) ? $_GET['username'] : '';
+    $password = isset($_GET['password']) ? $_GET['password'] : '';
 
-    
-    $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-    $result = $conn->query($sql);
+    if (!empty($username) && !empty($password)) {
+        // Query untuk mencari username dan password
+        $sql = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
+        $result = $conn->query($sql);
 
-    
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
+        if ($result->num_rows === 1) {  
+            $user = $result->fetch_assoc();
 
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
+            // Menyimpan session
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['role'] = $user['role'];
 
-        if ($user['role'] === 'admin') {
-            header("Location: /Views/dashboard/admin.php");
-        } else if ($user['role'] === 'user') {
-            header("Location: /Views/users/profile.php");
+            // Redirect sesuai role
+            if ($user['role'] === 'admin') {
+                header("Location: /Views/dashboard/admin.php");
+            } else if ($user['role'] === 'user') {
+                header("Location: /Views/users/profile.php?id={$user['id']}");
+            }
+            exit;
+        } else {
+            $error = "Username dan password salah";
         }
-        exit;
-    } else {
-       $error = "username dan password salah";
     }
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="login">
-        <form action="#" method="post">
+        <form action="#" method="get">
             <h2>Login</h2>
 
             <div class="form-group">
@@ -64,3 +68,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </body>
 </html>
+

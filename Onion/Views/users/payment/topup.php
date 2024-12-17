@@ -6,10 +6,14 @@ session_start();
 include __DIR__ . '/../../../config/connect.php';
 
 // Cek apakah pengguna sudah login
-if (!isset($_SESSION['username'])) {
-header('Location: /login.php');
-exit;
+if (!isset($_SESSION['id'])) {
+    header('Location: /login.php');
+    exit;
 }
+
+// ambil parameter dari url 
+$user_id = $_GET['id'];
+$username = $_GET['username'];
 
 // Ambil data dari form
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -20,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $amount = $_GET['amount'];
-    $username = $_SESSION['username'];
+    $id = $_SESSION['id'];
 
     // Validasi jumlah top-up
     if (!is_numeric($amount) || $amount <= 0) {
@@ -29,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     // Ambil user_id dari session
-    $query = "SELECT id FROM users WHERE username = '$username'";
+    $query = "SELECT * FROM users WHERE id = '$id'";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {
@@ -40,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $query = "INSERT INTO topup (user_id, amount, status) VALUES ('$user_id', '$amount', 'pending')";
 
         if ($conn->query($query)) {
-            echo "<script>alert('Permintaan top-up berhasil! Menunggu approval'); window.location.href='../profile.php';</script>";
+            echo "<script>alert('Permintaan top-up berhasil! Menunggu approval'); window.location.href='../profile.php?id={$user['id']}';</script>";
         } else {
             echo "Terjadi kesalahan: " . $conn->error;
         }

@@ -19,14 +19,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/../../../public/css/topup.css">
+    <link rel="stylesheet" type="text/css" href="/../../../public/css/transaction.css">
 </head>
 <body>
     <div class="container-topup">
         <!-- Form Topup -->
         <div class="account-info">
                 <h2>Topup Saldo</h2>
-                <form action="/Views/users/payment/topup.php" method="GET" class="user-list">
+                <form action="topup.php" method="GET" class="user-list">
                     <label>Jumlah Topup:</label>
                     <input type="number" name="amount"><br><br>
                     <input type="submit" value="Topup">

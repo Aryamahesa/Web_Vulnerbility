@@ -4,16 +4,19 @@ ini_set('display_errors', 1);
 session_start();
 include __DIR__ . '/../../config/connect.php';
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_id'])) {
     header('Location: /login.php');
     exit;
 }
 
-$username = $_SESSION['username'];
+// ambil parameter dari url 
+$user_id = $_GET['id'];
 
-$selectedUser = '';
+// perbarui session
+$_SESSION['id'] = $user_id;
+$_SESSION['username'] = $username;
 
-$query = "SELECT * FROM users WHERE username = '$username'";
+$query = "SELECT * FROM users WHERE id = '$user_id'";
 $result = $conn->query($query);
 
 // menampilkan data pengguna
@@ -65,7 +68,7 @@ if ($result->num_rows > 0) {
     </div>
 
     <div class="container">
-        <a href="/Views/users/payment/transaction.php" class="topup-button">Topup Saldo</a>
+        <a href="/Views/users/payment/transaction.php?id=<?php echo $user['id']; ?>" class="topup-button">Topup Saldo</a>
     </div>
 
     <!-- <div class="container">
