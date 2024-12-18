@@ -75,7 +75,7 @@ Tambahkan konfigurasi berikut:
     ServerName example.com
     DocumentRoot /path/to/directory/Onion
 
-    <Directory /path/to/direktori>
+    <Directory /path/to/direktori/Onion>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
