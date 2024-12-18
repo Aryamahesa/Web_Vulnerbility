@@ -73,7 +73,7 @@ Tambahkan konfigurasi berikut:
 ```apache
 <VirtualHost *:80>
     ServerName example.com
-    DocumentRoot /path/to/direktori
+    DocumentRoot /path/to/directory/Onion
 
     <Directory /path/to/direktori>
         Options Indexes FollowSymLinks
