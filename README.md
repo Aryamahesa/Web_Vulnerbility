@@ -73,9 +73,9 @@ Tambahkan konfigurasi berikut:
 ```apache
 <VirtualHost *:80>
     ServerName example.com
-    DocumentRoot /path/to/directory/Onion
+    DocumentRoot /var/www/html/Onion
 
-    <Directory /path/to/direktori/Onion>
+    <Directory /var/www/html/Onion>
         Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
