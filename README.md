@@ -194,5 +194,5 @@ CREATE TABLE transfer (
 Jika ada pertanyaan atau kontribusi:
 
 - **Email**: [aryamhsa23@gmail.com](mailto\:aryamhsa23@gmail.com.com)
-- **GitHub**: [Aryamahesa](https://github.com/Aryamahesaa)
+- **GitHub**: [Aryamahesa](https://github.com/Aryamahesa)
 
