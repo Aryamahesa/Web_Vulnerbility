@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             // Redirect sesuai role
             if ($user['role'] === 'admin') {
-                header("Location: /Views/dashboard/admin.php");
+                header("Location: /Views/dashboard/index.php");
             } else if ($user['role'] === 'user') {
                 header("Location: /Views/users/profile.php?id={$user['id']}");
             }
