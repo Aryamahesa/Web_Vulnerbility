@@ -17,8 +17,6 @@ body {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    /* overflow: hidden; 
-    position: center; */
 }
 
 .account-info {
@@ -99,4 +97,69 @@ input[type="submit"]:hover {
 
 .account-info ul li a:hover {
     color: #00408a;
+}
+
+/* Pop up style */
+/* Popup overlay (latar belakang pop-up) */
+.popup-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Latar belakang semi transparan */
+    z-index: 9999;
+    visibility: hidden; /* Secara default pop-up tersembunyi */
+}
+
+/* Pop-up box */
+.popup {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.popup h2 {
+    color: #f44336; /* Warna teks error */
+    font-size: 24px;
+}
+
+.popup p {
+    font-size: 16px;
+    color: #333;
+}
+
+.popup button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.popup button:hover {
+    background-color: #d32f2f;
+}
+
+/* Animasi fade-in untuk pop-up */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

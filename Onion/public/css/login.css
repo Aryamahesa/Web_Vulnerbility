@@ -10,7 +10,7 @@ body {
 }
 .login {
     background: #fff;
-    padding: 80px;
+    padding: 70px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -36,14 +36,7 @@ label {
     margin-bottom: 5px;
     color: #555;
 }
-input[type="text"]{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 20px;
-}
+input[type="text"],
 input[type="password"]{
     width: 100%;
     padding: 10px;
@@ -52,6 +45,7 @@ input[type="password"]{
     box-sizing: border-box;
     font-size: 20px;
 }
+
 button[type="submit"]{
     font-size: 20px;
 }
@@ -73,16 +67,4 @@ button:hover {
     padding: 10px;
     color: red;
     text-align: left;
-    /* margin-bottom: 10px; */
 }
-/* .registrasi {
-    text-align: center;
-    font-size: 14px;
-}
-.registrasi a {
-    color: #007bff;
-    text-decoration: none;
-}
-.registrasi a:hover {
-    text-decoration: underline;
-} */
