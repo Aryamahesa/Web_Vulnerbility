@@ -35,7 +35,7 @@ $result = $conn->query($query);
         <!-- Sidebar -->
         <aside class="sidebar">
             <form method="GET" action="" class="chat-form">
-                <h1>Chat</h1>
+                <h1>Chats</h1>
                 <a href="profile.php?id=<?= isset($_SESSION['id']) ? $_SESSION['id'] : ''; ?>" class="back-menu">
                     <i class="fas fa-sign-out-alt"></i> Back Profile
                 </a>
