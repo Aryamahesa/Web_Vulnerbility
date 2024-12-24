@@ -5,6 +5,7 @@ Sistem autentikasi pengguna sederhana ini dikembangkan dengan **PHP** dan **MySQ
 1. Dashboard Admin untuk mengelola pengguna.
 2. Halaman Profil Pengguna.
 3. Fitur Topup dan Transfer Saldo.
+4. Fitur Chat
 
 > **Peringatan**: Aplikasi ini sengaja dibuat rentan terhadap SQL Injection untuk tujuan pembelajaran. Jangan gunakan di lingkungan produksi.
 
@@ -25,7 +26,7 @@ Menu ini memungkinkan admin untuk:
 - Mengelola data pengguna.
 - Melihat aktivitas terbaru pengguna.
 
-**Path**: `/Views/dashboard/admin.php`
+**Path**: `/Views/dashboard/index.php`
 
 ### 3. Profil Pengguna
 
@@ -35,6 +36,7 @@ Setiap pengguna dapat melihat informasi pribadi mereka seperti:
 - Username
 - Email
 - Alamat
+- Saldo
 
 **Path**: `/Views/users/profile.php`
 
@@ -49,6 +51,12 @@ Pengguna dapat melakukan topup saldo melalui halaman khusus.
 Pengguna dapat melakukan transfer saldo ke pengguna lain.
 
 - **URL**: `/Views/users/payment/transfer.php`
+
+### 6. Fitur Chat
+
+Pengguna dapat dapat mengirim pesan chat ke pengguna lain.
+
+- **URL**: `/Views/users/chat.php`
 
 ---
 
@@ -144,9 +152,18 @@ CREATE TABLE transfer (
     receiver_id INT,
     amount INT,
     created_at DATETIME DEFAULT current_timestamp(),
-    status ENUM('pending','approved','rejected') DEFAULT 'pending',
     FOREIGN KEY (sender_id) REFERENCES users(id),
     FOREIGN KEY (receiver_id) REFERENCES users(id)
+);
+
+CREATE TABLE chat (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    receiver_id INT(11) NOT NULL,
+    message TEXT NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id), 
+    FOREIGN KEY (receiver_id) REFERENCES users(id) 
 );
 ```
 
@@ -155,7 +172,7 @@ CREATE TABLE transfer (
 1. Hubungkan database di `connect.php`.
 2. Akses aplikasi melalui browser:
    - **Login**: `http://localhost/Views/login.php`
-   - **Admin Dashboard**: `http://localhost/Views/dashboard/admin.php`
+   - **Admin Dashboard**: `http://localhost/Views/dashboard/index.php`
    - **Profil Pengguna**: `http://localhost/Views/users/profile.php`
 
 ---
@@ -166,10 +183,19 @@ CREATE TABLE transfer (
 ![Login Page](/img/login-page.png)
 
 ### 2. Dashboard Admin
-![Dashboard Admin](/img/data-users.png)
+![Dashboard Admin](/img/dashboard-information.png)
 
 
-![Dashboard Admin](/img/status-users.png)
+![Dashboard Admin](/img/users-data.png)
+
+
+![Dashboard Admin](/img/users-chat-history.png)
+
+
+![Dashboard Admin](/img/users-transfer-history.png)
+
+
+![Dashboard Admin](/img/users-topup-history.png)
 
 ### 3. Profil Pengguna
 ![Profile Page](/img/profile-page.png)
@@ -177,7 +203,8 @@ CREATE TABLE transfer (
 ### 4. Fitur Topup & Fitur Transfer
 ![Transaction Page](/img/transaction-page.png)
 
-
+### 4. Fitur Chat
+![Transaction Page](/img/chat-page.png)
 
 ---
 
@@ -185,7 +212,7 @@ CREATE TABLE transfer (
 
 1. Aplikasi ini **rentan terhadap SQL Injection** untuk tujuan edukasi.
 2. Jangan gunakan aplikasi ini di lingkungan produksi.
-3. Ubah file `connect.php` untuk konfigurasi database sesuai kebutuhan.
+3. Ubah file `/config/connect.php` untuk konfigurasi database sesuai kebutuhan.
 
 ---
 
@@ -193,6 +220,6 @@ CREATE TABLE transfer (
 
 Jika ada pertanyaan atau kontribusi:
 
-- **Email**: [aryamhsa23@gmail.com](mailto\:aryamhsa23@gmail.com.com)
+- **Email**: [aryamhsa23@gmail.com](mailto\:aryamhsa23@gmail.com)
 - **GitHub**: [Aryamahesa](https://github.com/Aryamahesa)
 
