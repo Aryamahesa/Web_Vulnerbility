@@ -103,69 +103,51 @@ sudo systemctl restart apache2
 ```
 
 ### 3. Setup Database
+1. Pastikan MySQL sudah terinstal di sistem Anda.
+2. Import file backup_db.sql ke MySQL:
 
+Jalankan perintah berikut di terminal:
+
+```bash
+mysql -u root -p < /path/to/backup_db.sql
+```
+Gantilah /path/to/backup_db.sql dengan path ke file yang Anda miliki.
+3. Verifikasi Database:
+
+Masuk ke MySQL untuk memeriksa apakah database dan tabel telah dibuat dengan benar:
 ```bash
 mysql -u root -p
 ```
 
-Jalankan query berikut:
-
-```sql
-CREATE DATABASE yourDB;
-CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
-GRANT ALL PRIVILEGES ON yourDB.* TO 'user'@'localhost';
-FLUSH PRIVILEGES;
-exit;
-```
-
-Koneksikan database dan buat tabel:
-
+Setelah masuk, gunakan nama database yang telah dibuat (misalnya yourDB):
 ```bash
-mysql -u user -p
+use yuourDB;
+show TABLES;
 ```
 
-```sql
-USE yourDB;
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    address TEXT NOT NULL,
-    role ENUM('admin', 'user') DEFAULT 'user',
-    balance DECIMAL(15,2) DEFAULT 0.00
-);
+Anda seharusnya melihat daftar tabel seperti:
+- users
+- topup
+- transfer
+- chat
 
-CREATE TABLE topup (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    amount INT,
-    created_at DATETIME DEFAULT current_timestamp(),
-    status ENUM('pending','approved','rejected') DEFAULT 'pending',
-    FOREIGN KEY (user_id) REFERENCES users(id)
-);
+4. Konfigurasikan Aplikasi:
+Perbarui file connect.php dengan kredensial yang sesuai, seperti: 
+```php
+<?php
+    $host = "localhost";
+    $userConfig = "soc"; // Ganti dengan nama user di backup_db.sql
+    $password = "soc123"; // Ganti dengan password user di backup_db.sql
+    $dbName = "socDB"; // Nama database yang dibuat
 
-CREATE TABLE transfer (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    sender_id INT,
-    receiver_id INT,
-    amount INT,
-    created_at DATETIME DEFAULT current_timestamp(),
-    FOREIGN KEY (sender_id) REFERENCES users(id),
-    FOREIGN KEY (receiver_id) REFERENCES users(id)
-);
+    $conn = new mysqli($host, $userConfig, $password, $dbName);
 
-CREATE TABLE chat (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id INT(11) NOT NULL,
-    receiver_id INT(11) NOT NULL,
-    message TEXT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id), 
-    FOREIGN KEY (receiver_id) REFERENCES users(id) 
-);
+    if ($conn -> connect_error){
+        die ("Koneksi gagal : " . $conn -> connect_error);
+    }
+?>
 ```
+
 
 ### 4. Jalankan Aplikasi
 
