@@ -4,16 +4,49 @@ ini_set('display_errors', 1);
 session_start();
 include __DIR__ . '/../../config/connect.php';
 
-// Mengambil permintaan top-up dan transfer yang belum disetujui
-$query_topup = "SELECT topup.*, users.username FROM topup JOIN users ON topup.user_id = users.id WHERE topup.status = 'pending'";
-$query_transfer = "SELECT transfer.*, sender.username AS sender_username, receiver.username AS receiver_username 
-                   FROM transfer 
-                   JOIN users AS sender ON transfer.sender_id = sender.id 
-                   JOIN users AS receiver ON transfer.receiver_id = receiver.id 
-                   WHERE transfer.status = 'pending'";
+// Tentukan jumlah data per halaman
+$limit = 10;
 
+// Ambil nomor halaman dari URL (default halaman 1)
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+// Query untuk mengambil semua riwayat top-up dengan pagination
+$query_topup = "
+    SELECT topup.*, users.username 
+    FROM topup 
+    JOIN users ON topup.user_id = users.id
+    ORDER BY topup.created_at DESC
+    LIMIT $limit OFFSET $offset
+";
 $result_topup = $conn->query($query_topup);
-$result_transfer = $conn->query($query_transfer);
+
+// Ambil total data untuk menghitung jumlah halaman
+$query_count = "SELECT COUNT(*) AS total FROM topup";
+$result_count = $conn->query($query_count);
+$total_rows = $result_count->fetch_assoc()['total'];
+$total_pages = ceil($total_rows / $limit);
+
+// Menangani aksi approve atau reject
+if (isset($_GET['action']) && isset($_GET['id'])) {
+    $topup_id = (int)$_GET['id'];
+    $action = $_GET['action'];
+
+    // Validasi aksi (approve atau reject)
+    if ($action === 'approve' || $action === 'reject') {
+        $status = ($action === 'approve') ? 'approved' : 'rejected';
+
+        // Update status top-up
+        $update_query = "UPDATE topup SET status = '$status' WHERE id = $topup_id";
+        if ($conn->query($update_query)) {
+            echo "<script>alert('Top-up telah $status!'); window.location.href='status.php';</script>";
+        } else {
+            echo "Terjadi kesalahan saat memperbarui status top-up.";
+        }
+    }
+}
+
+$current_page = basename($_SERVER['PHP_SELF']); 
 ?>
 
 <!DOCTYPE html>
@@ -21,37 +54,41 @@ $result_transfer = $conn->query($query_transfer);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Dashboard</title>
-    <link rel="stylesheet" href="/../../public/css/admin1.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Top-Up History</title>
+    <link rel="stylesheet" href="/../../public/css/admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
 <!-- Sidebar Menu -->
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>Dashboard</h2>
+        <img src="../../public/img/onion-logo.png" alt="Logo" class="logo">
     </div>
     <ul class="sidebar-menu">
-        <li><a href="admin.php"><i class="fas fa-users"></i> Users</a></li>
-        <li><a href="status.php"><i class="fas fa-check-circle"></i> Status</a></li>
-        <li><a href="/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        <a href="index.php" class="menu-item <?= $current_page == 'index.php' ? 'active' : '' ?>"><i class="fas fa-fw fa-tachometer-alt"></i> Dashboard</a>
+        <a href="users.php" class="menu-item <?= $current_page == 'users.php' ? 'active' : '' ?>"><i class="fas fa-users"></i> Users</a>
+        <a href="chat.php" class="menu-item <?= $current_page == 'chat.php' ? 'active' : '' ?>"><i class="fas fa-comment-alt"></i> Chat</a>
+        <a href="transfer.php" class="menu-item <?= $current_page == 'transfer.php' ? 'active' : '' ?>"><i class="fa-solid fa-money-bill-transfer"></i> Transfer</a>
+        <a href="status.php" class="menu-item <?= $current_page == 'status.php' ? 'active' : '' ?>"><i class="fa-solid fa-wallet"></i> Top-Up</a>
+        <a href="/logout.php" class="menu-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </ul>
 </div>
 
 <!-- Main Content -->
 <div class="main-content">
 
-    <!-- Tabel Top-Up Pending -->
-    <h2>Request Top-Up</h2>
+    <!-- Tabel Riwayat Top-Up -->
+    <h1>Top-Up History</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th class="rounded-header-top-left">ID</th>
                 <th>Username</th>
                 <th>Amount</th>
                 <th>Status</th>
-                <th>Action</th>
+                <th>Created At</th>
+                <th class="rounded-header-top-right">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -61,57 +98,60 @@ $result_transfer = $conn->query($query_transfer);
                         <td><?= $topup['id'] ?></td>
                         <td><?= $topup['username'] ?></td>
                         <td><?= $topup['amount'] ?></td>
-                        <td><?= $topup['status'] ?></td>
+                        <td><?= ucfirst($topup['status']) ?></td>
+                        <td><?= $topup['created_at'] ?></td>
                         <td>
-                            <a href="approve_topup.php?id=<?= $topup['id'] ?>&action=approve" class="approve">Approve</a> |
-                            <a href="approve_topup.php?id=<?= $topup['id'] ?>&action=reject" class="reject">Reject</a>
+                            <?php if ($topup['status'] === 'pending'): ?>
+                                <a href="?action=approve&id=<?= $topup['id'] ?>" class="approve">Approve</a> |
+                                <a href="?action=reject&id=<?= $topup['id'] ?>" class="reject">Reject</a>
+                            <?php else: ?>
+                                <span>-</span>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
                 <tr>
-                    <td colspan="5" style="text-align: center;">Tidak ada permintaan top-up yang pending.</td>
+                    <td colspan="6" style="text-align: center;">Tidak ada riwayat top-up.</td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
 
-    <!-- Tabel Transfer Pending -->
-    <h2>Request Transfer</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Sender</th>
-                <th>Receiver</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if ($result_transfer->num_rows > 0): ?>
-                <?php while ($transfer = $result_transfer->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $transfer['id'] ?></td>
-                        <td><?= $transfer['sender_username'] ?></td>
-                        <td><?= $transfer['receiver_username'] ?></td>
-                        <td><?= $transfer['amount'] ?></td>
-                        <td><?= $transfer['status'] ?></td>
-                        <td>
-                            <a href="approve_transfer.php?id=<?= $transfer['id'] ?>&action=approve" class="approve">Approve</a> |
-                            <a href="approve_transfer.php?id=<?= $transfer['id'] ?>&action=reject" class="reject">Reject</a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr>
-                    <td colspan="6" style="text-align: center;">Tidak ada permintaan transfer yang pending.</td>
-                </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
+    <!-- Pagination -->
+    <div class="pagination">
+        <?php if ($page > 1): ?>
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page=<?= $page - 1 ?>">&lsaquo; Prev</a>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?page=<?= $i ?>" class="<?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
+        <?php endfor; ?>
+
+        <?php if ($page < $total_pages): ?>
+            <a href="?page=<?= $page + 1 ?>">Next &rsaquo;</a>
+            <a href="?page=<?= $total_pages ?>">Last &raquo;</a>
+        <?php endif; ?>
+    </div>
+
 </div>
+
+<!-- script -->
+<script>
+    // Tambahkan event listener untuk semua menu item
+    const menuItems = document.querySelectorAll('.menu-item');
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Hapus kelas active dari semua menu item
+            menuItems.forEach(menu => menu.classList.remove('active'));
+
+            // Tambahkan kelas active pada menu yang diklik
+            this.classList.add('active');
+        });
+    });
+</script>
 
 </body>
 </html>
