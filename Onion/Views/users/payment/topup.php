@@ -5,16 +5,6 @@ session_start();
 
 include __DIR__ . '/../../../config/connect.php';
 
-// Cek apakah pengguna sudah login
-if (!isset($_SESSION['id'])) {
-    header('Location: /login.php');
-    exit;
-}
-
-// ambil parameter dari url 
-$user_id = $_GET['id'];
-$username = $_GET['username'];
-
 // Ambil data dari form
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Validasi keberadaan parameter 'amount'

@@ -7,9 +7,9 @@
     include __DIR__ . '/../../../config/connect.php';
 
     // Cek apakah pengguna sudah login
-    if (!isset($_SESSION['username'])) {
-    header('Location: /login.php');
-    exit;
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login.php');
+        exit;
     }
 ?>
 
@@ -28,7 +28,7 @@
                 <h2>Topup Saldo</h2>
                 <form action="topup.php" method="GET" class="user-list">
                     <label>Jumlah Topup:</label>
-                    <input type="number" name="amount"><br><br>
+                    <input type="text" name="amount"><br><br>
                     <input type="submit" value="Topup">
                 </form>
             </div>
@@ -40,14 +40,10 @@
                     <label>Penerima:</label>
                     <input type="text" name="receiver_username"><br><br>
                     <label>Jumlah Transfer:</label>
-                    <input type="number" name="amount"><br><br>
+                    <input type="text" name="amount"><br><br>
                     <input type="submit" value="Transfer">
                 </form>
             </div>
     </div>
 </body>
 </html>
-
-<?php
-// include __DIR__ . "/topup.php";
-?>
