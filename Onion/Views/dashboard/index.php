@@ -19,6 +19,7 @@ $query = "
         (SELECT COUNT(*) FROM topup WHERE status = 'rejected') AS rejected_topups,
         (SELECT COUNT(*) FROM users) AS total_users;
 ";
+
 $result = $conn->query($query);
 $data = $result->fetch_assoc(); // Fetch the result into an associative array
 
