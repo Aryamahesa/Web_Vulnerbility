@@ -13,8 +13,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 $query = "SELECT * FROM users";
 $result = $conn->query($query);
 
-// include __DIR__ . "/header.php";
-
 $current_page = basename($_SERVER['PHP_SELF']); 
 ?>
 
