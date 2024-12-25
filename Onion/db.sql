@@ -17,6 +17,14 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
+-- Instructions to run this SQL script during database setup:
+-- 1. Open your MySQL or MariaDB command line tool.
+-- 2. Select the database where you want to import this data using the command:
+--    USE socDB;
+-- 3. Run the following command to import the SQL script:
+--    SOURCE /path/to/this/file/db.sql;
+--
+
 -- Table structure for table `chat`
 --
 
