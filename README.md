@@ -73,7 +73,7 @@ mv Onion /var/www/html/
 ### 2. Setup Apache Virtual Host
 
 ```bash
-sudo nano /etc/apache2/sites-available/your_configuration.conf
+sudo nano /etc/apache2/sites-available/onion.conf
 ```
 
 Tambahkan konfigurasi berikut:
@@ -97,7 +97,7 @@ Tambahkan konfigurasi berikut:
 Aktifkan virtual host dan restart Apache:
 
 ```bash
-sudo a2ensite your_configuration.conf
+sudo a2ensite onion.conf
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```
@@ -121,7 +121,7 @@ mysql -u root -p
 
 Setelah masuk, gunakan nama database yang telah dibuat (misalnya yourDB):
 ```bash
-use yuourDB;
+use socDB;
 show TABLES;
 ```
 
