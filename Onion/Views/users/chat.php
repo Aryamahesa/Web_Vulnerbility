@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
 include __DIR__ . '/../../config/connect.php';
 
@@ -41,7 +43,7 @@ $result = $conn->query($query);
                 </a>
             </form>
             <form method="GET" action="" class="search-form">
-                <input type="text" name="search" placeholder="Search..." value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>" class="search-input">
+                <input type="text" name="search" placeholder="Search..." value="<?= $search ?>" class="search-input">
                 <i class="fa-solid fa-magnifying-glass search-form-icon"></i>
             </form>
             <nav class="menu">
@@ -81,7 +83,7 @@ $result = $conn->query($query);
                         
                         if ($result && $result->num_rows > 0) {
                             $row = $result->fetch_assoc();
-                            echo htmlspecialchars($row['username']);
+                            echo $row['username'];
                         } else {
                             echo "User not found";
                         }
