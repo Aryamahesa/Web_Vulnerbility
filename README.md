@@ -109,7 +109,7 @@ sudo systemctl restart apache2
 Jalankan perintah berikut di terminal:
 
 ```bash
-mysql -u root -p < /path/to/backup_db.sql
+mysql -u root -p < /path/to/db.sql
 ```
 Gantilah /path/to/backup_db.sql dengan path ke file yang Anda miliki.
 3. Verifikasi Database:
