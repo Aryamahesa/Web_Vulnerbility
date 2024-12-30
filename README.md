@@ -7,7 +7,7 @@ Sistem autentikasi pengguna sederhana ini dikembangkan dengan **PHP** dan **MySQ
 3. Fitur Topup dan Transfer Saldo.
 4. Fitur Chat
 
-> **Peringatan**: Aplikasi ini sengaja dibuat rentan terhadap SQL Injection untuk tujuan pembelajaran. Jangan gunakan di lingkungan produksi.
+> **Peringatan**: Aplikasi ini sengaja dibuat rentan terhadap SQL Injection, IDOR, XSS untuk tujuan pembelajaran. Jangan gunakan di lingkungan produksi.
 
 ---
 
